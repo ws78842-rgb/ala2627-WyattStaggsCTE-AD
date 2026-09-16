@@ -2,7 +2,16 @@ const button = document.querySelector("#action");
 const output = document.querySelector("#output");
 
 button.addEventListener("click", function () {
-  const message = "Ketel Marte hits a single!";
+  const roll = Math.random();
+
+  let message = "Ketel Marte strikes out!";
+
+  if (roll < 0.25) {
+    message = "Ketel Marte singles!";
+  } else if (roll < 0.5) {
+    message = "Ketel Marte doubles!";
+  }
+
   output.textContent = message;
   console.log(message);
 });
