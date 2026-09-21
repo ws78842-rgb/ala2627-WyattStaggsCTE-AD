@@ -340,6 +340,62 @@ footer {
   transform: translateX(-50%);
 }
 
+.pitcher {
+  position: absolute;
+  left: calc(50% - 17px);
+  bottom: 103px;
+  z-index: 2;
+  width: 34px;
+  height: 58px;
+}
+
+.pitcher-cap {
+  position: absolute;
+  top: 0;
+  left: 7px;
+  width: 21px;
+  height: 17px;
+  background: var(--ink);
+  border-radius: 50% 50% 25% 25%;
+}
+
+.pitcher-cap::after {
+  content: '';
+  position: absolute;
+  right: -8px;
+  bottom: 0;
+  width: 12px;
+  height: 5px;
+  background: var(--ink);
+}
+
+.pitcher-body {
+  position: absolute;
+  bottom: 0;
+  left: 5px;
+  width: 25px;
+  height: 43px;
+  background: var(--yellow);
+  border: 2px solid var(--ink);
+  border-radius: 45% 45% 5px 5px;
+}
+
+.pitcher-arm {
+  position: absolute;
+  top: 22px;
+  right: -7px;
+  width: 10px;
+  height: 30px;
+  background: var(--ink);
+  border-radius: 8px;
+  transform: rotate(18deg);
+  transform-origin: top;
+}
+
+.pitcher.throwing .pitcher-arm {
+  animation: pitcher-throw .55s ease-in-out both;
+}
+
 .home-plate {
   position: absolute;
   left: 50%;
@@ -435,6 +491,53 @@ footer {
   transform-origin: bottom;
 }
 
+.batter.swing-contact .bat {
+  animation: bat-swing-contact .58s cubic-bezier(.2, .8, .25, 1) both;
+}
+
+.batter.swing-power .bat {
+  animation: bat-swing-power .68s cubic-bezier(.2, .8, .25, 1) both;
+}
+
+.batter.swing-miss {
+  animation: batter-stumble .52s ease both;
+}
+
+.batter.swing-miss .bat {
+  animation: bat-swing-miss .58s cubic-bezier(.2, .8, .25, 1) both;
+}
+
+.runner-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.runner {
+  position: absolute;
+  left: calc(50% - 5px);
+  bottom: 24px;
+  width: 13px;
+  height: 13px;
+  background: var(--yellow);
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  box-shadow: 0 5px 0 -2px var(--red);
+}
+
+.runner-single {
+  animation: run-single 1.15s ease-in-out both;
+}
+
+.runner-double {
+  animation: run-double 1.35s ease-in-out both;
+}
+
+.runner-home-run {
+  animation: run-home-run 1.7s ease-in-out both;
+}
+
 .pitch-marker {
   position: absolute;
   top: 50%;
@@ -484,7 +587,7 @@ footer {
   letter-spacing: 2px;
 }
 
-+.control-panel {
+.control-panel {
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -626,7 +729,7 @@ footer {
   font: 10px var(--mono);
 }
 
-+.bottom-grid {
+.bottom-grid {
   grid-column: 1 / -1;
   display: grid;
   grid-template-columns: 1.2fr 1.4fr .7fr;
@@ -754,7 +857,132 @@ footer b {
   font-size: 12px;
 }
 
-+@keyframes pitch {
+@keyframes pitcher-throw {
+
+  0%,
+  100% {
+    transform: rotate(18deg);
+  }
+
+  45% {
+    transform: rotate(-115deg);
+  }
+
+  70% {
+    transform: rotate(-70deg);
+  }
+}
+
+@keyframes bat-swing-contact {
+  0% {
+    transform: rotate(35deg);
+  }
+
+  38% {
+    transform: rotate(-52deg);
+  }
+
+  100% {
+    transform: rotate(12deg);
+  }
+}
+
+@keyframes bat-swing-power {
+  0% {
+    transform: rotate(35deg);
+  }
+
+  35% {
+    transform: rotate(-68deg);
+  }
+
+  100% {
+    transform: rotate(20deg);
+  }
+}
+
+@keyframes bat-swing-miss {
+  0% {
+    transform: rotate(35deg);
+  }
+
+  52% {
+    transform: rotate(-78deg);
+  }
+
+  100% {
+    transform: rotate(52deg);
+  }
+}
+
+@keyframes batter-stumble {
+  45% {
+    transform: translateX(-4px) rotate(-3deg);
+  }
+
+  100% {
+    transform: translateX(0) rotate(0);
+  }
+}
+
+@keyframes run-single {
+  0% {
+    left: calc(50% - 5px);
+    bottom: 24px;
+  }
+
+  100% {
+    left: calc(50% + 80px);
+    bottom: 103px;
+  }
+}
+
+@keyframes run-double {
+  0% {
+    left: calc(50% - 5px);
+    bottom: 24px;
+  }
+
+  48% {
+    left: calc(50% + 80px);
+    bottom: 103px;
+  }
+
+  100% {
+    left: calc(50% - 5px);
+    bottom: 184px;
+  }
+}
+
+@keyframes run-home-run {
+  0% {
+    left: calc(50% - 5px);
+    bottom: 24px;
+  }
+
+  25% {
+    left: calc(50% + 80px);
+    bottom: 103px;
+  }
+
+  50% {
+    left: calc(50% - 5px);
+    bottom: 184px;
+  }
+
+  75% {
+    left: calc(50% - 97px);
+    bottom: 103px;
+  }
+
+  100% {
+    left: calc(50% - 5px);
+    bottom: 24px;
+    opacity: 0;
+  }
+}
+
+@keyframes pitch {
   from {
     transform: translate(-50%, -50%) scale(4);
     opacity: 0;
@@ -786,7 +1014,7 @@ footer b {
   }
 }
 
-+@media (max-width: 850px) {
+@media (max-width: 850px) {
 
   .topbar,
   .game-shell,
@@ -835,7 +1063,7 @@ footer b {
   }
 }
 
-+@media (max-width: 500px) {
+@media (max-width: 500px) {
   .scoreboard {
     padding: 11px 8px;
   }
