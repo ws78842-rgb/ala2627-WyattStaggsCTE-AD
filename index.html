@@ -4,96 +4,103 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <title>Wyatt Staggs | Creative technologist</title>
-
-  <meta name="description"
-    content="Wyatt Staggs is learning to build games, interactive worlds, and playful experiences with code.">
-
+  <title>Diamond Pulse | Baseball</title>
+  <meta name="description" content="A fast, arcade-style baseball batting game.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-  <div class="noise" aria-hidden="true"></div>
-  <canvas id="constellation" aria-hidden="true"></canvas>
-
-  <header class="site-header">
-    <a class="wordmark" href="#top" aria-label="Wyatt Staggs home"><span>W</span> / WS</a>
-    <nav aria-label="Main navigation">
-      <a href="#work">Work</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
-    </nav>
-    <div class="availability"><i></i> Available to create</div>
+  <div class="grain" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="#top"><span class="brand-mark">DP</span><span>DIAMOND<br><b>PULSE</b></span></a>
+    <div class="league-chip"><span class="live-dot"></span> EXHIBITION // 01</div>
+    <button class="icon-button" id="soundButton" type="button" aria-label="Toggle sound">♪</button>
   </header>
 
-  <main id="top" class="bento-grid">
-    <section class="tile hero reveal">
-      <div class="eyebrow">01 / Personal index</div>
-      <p class="hero-kicker">Hey, I'm Wyatt<span class="cursor">_</span></p>
-      <h1>I make curious<br><em>things</em> with code.</h1>
-      <p class="hero-copy">A student learning the art of game-making, interactive worlds, and turning a blank screen
-        into something people can play with.</p>
-      <a class="arrow-link" href="#work">Explore my work <span>↘</span></a>
-      <div class="hero-orbit orbit-one" aria-hidden="true"></div>
-      <div class="hero-orbit orbit-two" aria-hidden="true"></div>
-      <div class="hero-glow" aria-hidden="true"></div>
-    </section>
-
-    <section class="tile portrait reveal delay-1" aria-label="Wyatt's visual signature">
-      <div class="tile-label">Currently</div>
-      <div class="portrait-art" aria-hidden="true">
-        <span class="portrait-ring ring-a"></span>
-        <span class="portrait-ring ring-b"></span>
-        <span class="portrait-core">W</span>
+  <main id="top" class="game-shell">
+    <section class="scoreboard" aria-label="Game scoreboard">
+      <div class="score-team away"><span class="team-badge">AT</span>
+        <div><small>AWAY</small><strong>ASTROS</strong></div><b id="awayScore">0</b>
       </div>
-      <div class="portrait-caption"><span>Learning in public</span><strong>2026</strong></div>
+      <div class="game-state"><span class="inning-label">TOP <b id="inningNumber">1</b></span><span
+          class="outs"><i></i><i></i><i></i></span><span id="countLabel">0 - 0</span></div>
+      <div class="score-team home"><b id="homeScore">0</b>
+        <div><small>HOME</small><strong>COMETS</strong></div><span class="team-badge red">CO</span>
+      </div>
     </section>
 
-    <section id="work" class="tile project reveal delay-2">
-      <div class="tile-label">Featured project <span>↗</span></div>
-      <div class="project-index">01</div>
-      <h2>The Code Word</h2>
-      <p>A small game with a big question: can you crack the signal before the system catches on?</p>
-      <div class="tags"><span>Game design</span><span>JavaScript</span><span>Logic</span></div>
-      <div class="project-line"><span></span><span>In progress</span></div>
+    <section class="stadium-panel">
+      <div class="stadium-head">
+        <div><span class="overline">LIVE FROM PULSE PARK</span>
+          <h1>BATTER'S BOX</h1>
+        </div>
+        <div class="weather"><span>☀</span> 78°F <small>WIND 7 MPH IN</small></div>
+      </div>
+      <div class="field-wrap">
+        <div class="crowd crowd-top" aria-hidden="true"></div>
+        <div class="field">
+          <div class="outfield-line"></div>
+          <div class="infield"></div>
+          <div class="pitcher-mound"></div>
+          <div class="home-plate"></div>
+          <div class="base first"><span></span></div>
+          <div class="base second"><span></span></div>
+          <div class="base third"><span></span></div>
+          <div class="batter batter-left"><span class="helmet"></span><span class="body"></span><span
+              class="bat"></span></div>
+          <div class="pitch-marker" id="pitchMarker"></div>
+          <div class="field-callout" id="fieldCallout">READY?</div>
+        </div>
+        <div class="field-caption"><span>POWER <b>●●●○○</b></span><span id="lastPlay">Press THROW PITCH to
+            start</span><span>CONTROL <b>●●●●○</b></span></div>
+      </div>
     </section>
 
-    <section id="about" class="tile about reveal delay-3">
-      <div class="tile-label">A little context</div>
-      <p class="about-statement">I’m interested in the moment when an idea stops being just an idea and becomes
-        <strong>something you can click, play, and share.</strong></p>
-      <div class="about-footer"><span>Based in the U.S.</span><span class="mono">[ open to learning ]</span></div>
-    </section>
+    <aside class="control-panel">
+      <div class="batter-card">
+        <div class="player-avatar" id="playerAvatar">JR</div>
+        <div class="batter-copy"><span class="overline">NOW BATTING // <b id="batterOrder">01</b></span>
+          <h2 id="batterName">Julio Rodriguez</h2>
+          <p id="batterMeta">CF <span>•</span> R/R <span>•</span> AVG .312</p>
+        </div>
+        <div class="batter-number" id="batterNumber">44</div>
+      </div>
+      <div class="action-area">
+        <div class="pitch-readout"><span class="overline">PITCH READ</span><strong id="pitchRead">Awaiting
+            pitcher</strong><small id="pitchHint">Watch the marker, then choose your swing.</small></div>
+        <div class="actions"><button class="action-button primary" id="pitchButton" type="button"><span>01</span> THROW
+            PITCH <b>↗</b></button><button class="action-button" data-swing="contact" type="button"
+            disabled><span>02</span> CONTACT SWING <b>SPACE</b></button><button class="action-button" data-swing="power"
+            type="button" disabled><span>03</span> POWER SWING <b>SHIFT</b></button></div>
+      </div>
+      <button class="reset-button" id="resetButton" type="button">↻ RESET GAME</button>
+    </aside>
 
-    <section class="tile skills reveal delay-1">
-      <div class="tile-label">The toolkit</div>
-      <ul class="skill-list">
-        <li><span>01</span><strong>HTML / CSS</strong><small>Structure + motion</small></li>
-        <li><span>02</span><strong>JavaScript</strong><small>Making it respond</small></li>
-        <li><span>03</span><strong>Python</strong><small>World-building logic</small></li>
-      </ul>
-    </section>
-
-    <section id="contact" class="tile contact reveal delay-2">
-      <div class="tile-label">Have a good idea?</div>
-      <h2>Let's make<br><em>something.</em></h2>
-      <a class="contact-link" href="mailto:warriorjames1114@gmail.com">warriorjames1114@gmail.com <span>↗</span></a>
-      <div class="contact-meta"><span>Say hello</span><span>01—04</span></div>
-    </section>
-
-    <section class="tile quote reveal delay-3">
-      <span class="quote-mark">“</span>
-      <blockquote>Every screen is an invitation to wonder what happens next.</blockquote>
-      <span class="quote-credit">— personal operating system</span>
+    <section class="bottom-grid">
+      <div class="panel play-log">
+        <div class="panel-heading"><span class="overline">PLAY-BY-PLAY</span><span id="playCount">01 / 09</span></div>
+        <ol id="playLog">
+          <li class="active">Game ready. Step into the box.</li>
+        </ol>
+      </div>
+      <div class="panel roster">
+        <div class="panel-heading"><span class="overline">LINEUP // COMETS</span><span>R / R</span></div>
+        <div class="roster-list" id="rosterList"></div>
+      </div>
+      <div class="panel tip-panel"><span class="tip-number">TIP 01</span>
+        <h3>Read the<br><em>pitch.</em></h3>
+        <p>Contact swings are safer. Power swings can clear the wall.</p>
+      </div>
     </section>
   </main>
-
-  <footer class="site-footer"><span>© Wyatt Staggs</span><span>Built by hand / last updated 09.2026</span><span>Scroll
-      to explore ↓</span></footer>
-
+  <footer><span>DIAMOND PULSE <b>⚾</b> ARCADE BASEBALL</span><span>ORIGINAL FAN-MADE CONCEPT // NO OFFICIAL LEAGUE
+      AFFILIATION</span></footer>
   <script src="app.js"></script>
-
 </body>
 
 </html>

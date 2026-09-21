@@ -1,61 +1,61 @@
-const canvas = document.querySelector('#constellation');
-const context = canvas.getContext('2d');
-const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const batters = [
+  ['Julio Rodriguez', '44', 'CF', '.312'], ['Mookie Betts', '50', '2B', '.298'],
+  ['Aaron Judge', '99', 'RF', '.327'], ['Shohei Ohtani', '17', 'DH', '.304'],
+  ['Juan Soto', '22', 'RF', '.311'], ['Ronald Acuna Jr.', '13', 'LF', '.289'],
+  ['Bobby Witt Jr.', '7', 'SS', '.301'], ['Freddie Freeman', '5', '1B', '.315'],
+  ['Yordan Alvarez', '44', 'DH', '.286']
+];
+const pitchTypes = [['FASTBALL', '96 MPH'], ['SLIDER', '88 MPH'], ['CHANGEUP', '84 MPH'], ['CURVE', '79 MPH']];
+const state = { batter: 0, inning: 1, outs: 0, strikes: 0, balls: 0, away: 0, home: 0, bases: [false, false, false], pitchReady: false, plays: 1 };
+const $ = (selector) => document.querySelector(selector);
 
-let width = 0;
-let height = 0;
-let points = [];
+function initials(name) { return name.split(' ').map((part) => part[0]).join('').slice(0, 2); }
+function setText(selector, value) { $(selector).textContent = value; }
 
-function resizeCanvas() {
-  const ratio = window.devicePixelRatio || 1;
-  width = window.innerWidth;
-  height = window.innerHeight;
-  canvas.width = width * ratio;
-  canvas.height = height * ratio;
-  canvas.style.width = `${width}px`;
-  canvas.style.height = `${height}px`;
-  context.setTransform(ratio, 0, 0, ratio, 0, 0);
-  points = Array.from({ length: Math.min(42, Math.floor(width / 28)) }, () => ({
-    x: Math.random() * width,
-    y: Math.random() * height,
-    speed: Math.random() * 0.16 + 0.04,
-    size: Math.random() * 1.5 + 0.4
-  }));
+function renderRoster() {
+  $('#rosterList').innerHTML = batters.map((batter, index) => `<button class="roster-player ${index === state.batter ? 'selected' : ''}" type="button" data-batter="${index}"><span>${String(index + 1).padStart(2, '0')}</span><b>${batter[0]}</b><small>${batter[2]}</small></button>`).join('');
+  document.querySelectorAll('[data-batter]').forEach((button) => button.addEventListener('click', () => { state.batter = Number(button.dataset.batter); renderBatter(); }));
 }
 
-function drawConstellation() {
-  context.clearRect(0, 0, width, height);
-  points.forEach((point, index) => {
-    point.y -= point.speed;
-    if (point.y < -10) point.y = height + 10;
-    context.beginPath();
-    context.arc(point.x, point.y, point.size, 0, Math.PI * 2);
-    context.fillStyle = 'rgba(213, 242, 111, .4)';
-    context.fill();
-
-    const next = points[(index + 1) % points.length];
-    const distance = Math.hypot(point.x - next.x, point.y - next.y);
-    if (distance < 115) {
-      context.beginPath();
-      context.moveTo(point.x, point.y);
-      context.lineTo(next.x, next.y);
-      context.strokeStyle = `rgba(213, 242, 111, ${0.1 - distance / 1400})`;
-      context.stroke();
-    }
-  });
-  if (!reduceMotion) requestAnimationFrame(drawConstellation);
+function renderBatter() {
+  const batter = batters[state.batter];
+  setText('#batterName', batter[0]); setText('#batterNumber', batter[1]); setText('#playerAvatar', initials(batter[0]));
+  setText('#batterOrder', String(state.batter + 1).padStart(2, '0')); setText('#batterMeta', `${batter[2]}  •  R/R  •  AVG ${batter[3]}`); renderRoster();
 }
 
-resizeCanvas();
-drawConstellation();
-window.addEventListener('resize', resizeCanvas);
+function addPlay(message, active = true) {
+  const log = $('#playLog'); const item = document.createElement('li'); item.textContent = message;
+  if (active) { log.querySelector('.active')?.classList.remove('active'); item.classList.add('active'); }
+  log.prepend(item); state.plays += 1; setText('#playCount', `${String(Math.min(state.plays, 9)).padStart(2, '0')} / 09`);
+}
 
-document.querySelectorAll('a[href^="#"]').forEach((link) => {
-  link.addEventListener('click', (event) => {
-    const target = document.querySelector(link.getAttribute('href'));
-    if (target) {
-      event.preventDefault();
-      target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
-    }
-  });
-});
+function updateScoreboard() {
+  setText('#awayScore', state.away); setText('#homeScore', state.home); setText('#inningNumber', state.inning); setText('#countLabel', `${state.balls} - ${state.strikes}`);
+  document.querySelectorAll('.outs i').forEach((light, index) => light.classList.toggle('lit', index < state.outs));
+  ['first', 'second', 'third'].forEach((base, index) => $(`.${base}`).classList.toggle('occupied', state.bases[index]));
+}
+
+function throwPitch() {
+  if (state.pitchReady) return;
+  const pitch = pitchTypes[Math.floor(Math.random() * pitchTypes.length)]; state.pitchReady = true;
+  setText('#pitchRead', `${pitch[0]}  /  ${pitch[1]}`); setText('#pitchHint', 'Ball is live. Swing now.'); setText('#fieldCallout', pitch[0]);
+  $('#pitchMarker').classList.add('active'); $('#pitchButton').disabled = true;
+  document.querySelectorAll('[data-swing]').forEach((button) => { button.disabled = false; });
+}
+
+function swing(type) {
+  if (!state.pitchReady) return;
+  const hitChance = type === 'power' ? 0.52 : 0.73; const roll = Math.random(); const marker = $('#pitchMarker');
+  marker.classList.remove('active'); marker.classList.add('hit'); setTimeout(() => marker.classList.remove('hit'), 420);
+  state.pitchReady = false; document.querySelectorAll('[data-swing]').forEach((button) => { button.disabled = true; }); $('#pitchButton').disabled = false;
+  if (roll > hitChance) { state.strikes += 1; setText('#fieldCallout', state.strikes >= 3 ? 'STRIKE 3' : 'SWING & MISS'); addPlay(state.strikes >= 3 ? `${batters[state.batter][0]} strikes out swinging.` : `${batters[state.batter][0]} swings through the ${type} pitch.`); if (state.strikes >= 3) nextBatter(true); }
+  else { const outcomeRoll = Math.random(); const outcome = type === 'power' && outcomeRoll < .32 ? 'HOME RUN' : outcomeRoll < .2 ? 'DOUBLE' : 'SINGLE'; const runs = outcome === 'HOME RUN' ? 1 + state.bases.filter(Boolean).length : (state.bases[2] ? 1 : 0); state.home += runs; state.bases = outcome === 'HOME RUN' ? [false, false, false] : outcome === 'DOUBLE' ? [false, true, false] : [true, false, false]; setText('#fieldCallout', outcome); addPlay(`${batters[state.batter][0]} ${outcome.toLowerCase()}${runs ? `, ${runs} run${runs > 1 ? 's' : ''} scored` : ''}.`); nextBatter(false); }
+  state.balls = 0; state.strikes = 0; updateScoreboard();
+}
+
+function nextBatter(wasOut) { if (wasOut) { state.outs += 1; state.bases = [false, false, false]; } state.batter = (state.batter + 1) % batters.length; if (state.outs >= 3) { state.inning += 1; state.outs = 0; addPlay(`End of inning ${state.inning - 1}. New frame, new energy.`); } renderBatter(); }
+function resetGame() { Object.assign(state, { batter: 0, inning: 1, outs: 0, strikes: 0, balls: 0, away: 0, home: 0, bases: [false, false, false], pitchReady: false, plays: 1 }); $('#playLog').innerHTML = '<li class="active">Game ready. Step into the box.</li>'; setText('#fieldCallout', 'READY?'); setText('#pitchRead', 'Awaiting pitcher'); setText('#pitchHint', 'Watch the marker, then choose your swing.'); $('#pitchButton').disabled = false; renderBatter(); updateScoreboard(); }
+
+$('#pitchButton').addEventListener('click', throwPitch); document.querySelectorAll('[data-swing]').forEach((button) => button.addEventListener('click', () => swing(button.dataset.swing))); $('#resetButton').addEventListener('click', resetGame); $('#soundButton').addEventListener('click', (event) => { event.currentTarget.classList.toggle('muted'); event.currentTarget.textContent = event.currentTarget.classList.contains('muted') ? '×' : '♪'; });
+document.addEventListener('keydown', (event) => { if (event.code === 'Space') { event.preventDefault(); state.pitchReady ? swing('contact') : throwPitch(); } if (event.key === 'Shift') swing('power'); });
+renderBatter(); updateScoreboard();
