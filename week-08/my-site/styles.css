@@ -75,7 +75,8 @@ body {
   border-top: 6px solid var(--accent);
 }
 
-#action {
+#action,
+.secondary-btn {
   font: inherit;
   font-weight: 700;
   color: var(--text);
@@ -88,13 +89,26 @@ body {
   box-shadow: 0 6px 14px rgba(245, 200, 66, 0.35);
 }
 
-#action:hover {
+#action:hover,
+.secondary-btn:hover {
   transform: translateY(-2px);
 }
 
-#action:focus {
+#action:focus,
+.secondary-btn:focus {
   outline: 3px solid rgba(17, 32, 51, 0.25);
   outline-offset: 3px;
+}
+
+.secondary-btn {
+  background: linear-gradient(180deg, #e0ebff, #bfd2ff);
+}
+
+.button-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
 }
 
 #output {

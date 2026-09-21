@@ -1,4 +1,5 @@
 const button = document.querySelector("#action");
+const nextButton = document.querySelector("#nextAtBat");
 const output = document.querySelector("#output");
 
 button.addEventListener("click", function () {
@@ -14,6 +15,12 @@ button.addEventListener("click", function () {
     message = "Ketel Marte triples!";
   }
 
+  output.textContent = message;
+  console.log(message);
+});
+
+nextButton.addEventListener("click", function () {
+  const message = "Next at-bat: Ketel Marte steps back in.";
   output.textContent = message;
   console.log(message);
 });
