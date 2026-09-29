@@ -1,5 +1,7 @@
 # Your landing page
 
+[Open Diamond Pulse Baseball](index.html)
+
 **Step 0 — is this repo yours?**
 
 Look at the name at the very top of this page. If it says **coltonsharp-dev / …** you are still
@@ -30,11 +32,11 @@ Everything below assumes you are in **your own** repo.
 
 ## What is in here — three projects, one codespace
 
-| Folder | Project | Run it by |
-|---|---|---|
-| **root** — `index.html`, `styles.css` | Your landing page. This is what GitHub Pages puts on the internet. | Terminal: `python -m http.server 8000` |
-| **`game/`** — `game.py` | The Vault, a text adventure. Its own README is in that folder. | Open the file, click **▶ Run** — or `python game/game.py` |
-| **`assignments/01-this-is-me/`** | Assignment 01. A working site you make yours — 14 TODOs. Its own README is in that folder. | Serve the root, then visit `/assignments/01-this-is-me/` |
+| Folder                                | Project                                                                                    | Run it by                                                 |
+| ------------------------------------- | ------------------------------------------------------------------------------------------ | --------------------------------------------------------- |
+| **root** — `index.html`, `styles.css` | Your landing page. This is what GitHub Pages puts on the internet.                         | Terminal: `python -m http.server 8000`                    |
+| **`game/`** — `game.py`               | The Vault, a text adventure. Its own README is in that folder.                             | Open the file, click **▶ Run** — or `python game/game.py` |
+| **`assignments/01-this-is-me/`**      | Assignment 01. A working site you make yours — 14 TODOs. Its own README is in that folder. | Serve the root, then visit `/assignments/01-this-is-me/`  |
 
 One codespace opens all three. `game/` is invisible to your website, and the assignment sits in
 its own folder — Pages serves `index.html` from the root, so none of them interfere. The
@@ -142,17 +144,17 @@ Good for a typo. Use the codespace for real work.
 
 ## When something goes wrong
 
-| What you see | What it actually is |
-|---|---|
-| Nothing saves / repo is not yours | Still in Mr. Sharp's copy. See Step 0. |
-| Live URL 404s and the file is right | The repo name in the address is misspelled or mis-capitalised. It must match exactly. |
-| Page is blank | A tag you never closed. Look for a `<p>` with no `</p>`. |
-| Terminal will not take a command | The server is running in it. **Ctrl+C**, or open a second terminal with **+**. |
-| Changes not on the live URL | You edited but did not **commit and push**. Check Source Control for a number. |
-| Still not showing after pushing | Give it a minute, then hard-reload: **Ctrl+Shift+R**. |
-| **404** on your Pages URL | The filename. It must be `index.html` — all lower case. `Index.html` will not serve. |
-| Page loads with no styling | `styles.css` is missing or renamed. The name in the `<link>` must match the file exactly. |
-| Codex will not sign in | It needs a **Plus, Pro, Business, Edu or Enterprise** ChatGPT plan. A free account cannot sign in. |
+| What you see                        | What it actually is                                                                                |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------- |
+| Nothing saves / repo is not yours   | Still in Mr. Sharp's copy. See Step 0.                                                             |
+| Live URL 404s and the file is right | The repo name in the address is misspelled or mis-capitalised. It must match exactly.              |
+| Page is blank                       | A tag you never closed. Look for a `<p>` with no `</p>`.                                           |
+| Terminal will not take a command    | The server is running in it. **Ctrl+C**, or open a second terminal with **+**.                     |
+| Changes not on the live URL         | You edited but did not **commit and push**. Check Source Control for a number.                     |
+| Still not showing after pushing     | Give it a minute, then hard-reload: **Ctrl+Shift+R**.                                              |
+| **404** on your Pages URL           | The filename. It must be `index.html` — all lower case. `Index.html` will not serve.               |
+| Page loads with no styling          | `styles.css` is missing or renamed. The name in the `<link>` must match the file exactly.          |
+| Codex will not sign in              | It needs a **Plus, Pro, Business, Edu or Enterprise** ChatGPT plan. A free account cannot sign in. |
 
 ---
 
