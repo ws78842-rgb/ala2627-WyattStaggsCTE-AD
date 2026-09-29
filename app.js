@@ -6,7 +6,15 @@ const batters = [
   ['Yordan Alvarez', '44', 'DH', '.286']
 ];
 const pitchTypes = [['FASTBALL', '96 MPH'], ['SLIDER', '88 MPH'], ['CHANGEUP', '84 MPH'], ['CURVE', '79 MPH']];
+const battingStats = [
+  { atBats: 548, hits: 171, homeRuns: 24, rbi: 86 }, { atBats: 572, hits: 170, homeRuns: 26, rbi: 91 },
+  { atBats: 511, hits: 167, homeRuns: 48, rbi: 118 }, { atBats: 537, hits: 163, homeRuns: 38, rbi: 102 },
+  { atBats: 556, hits: 173, homeRuns: 35, rbi: 97 }, { atBats: 534, hits: 154, homeRuns: 41, rbi: 101 },
+  { atBats: 569, hits: 171, homeRuns: 32, rbi: 89 }, { atBats: 563, hits: 177, homeRuns: 25, rbi: 93 },
+  { atBats: 521, hits: 149, homeRuns: 31, rbi: 88 }
+];
 const state = { batter: 0, inning: 1, outs: 0, strikes: 0, balls: 0, away: 0, home: 0, bases: [false, false, false], pitchReady: false, plays: 1 };
+const tableState = { sort: 'average', direction: 'desc' };
 const $ = (selector) => document.querySelector(selector);
 
 function initials(name) { return name.split(' ').map((part) => part[0]).join('').slice(0, 2); }
@@ -21,6 +29,16 @@ function renderBatter() {
   const batter = batters[state.batter];
   setText('#batterName', batter[0]); setText('#batterNumber', batter[1]); setText('#playerAvatar', initials(batter[0]));
   setText('#batterOrder', String(state.batter + 1).padStart(2, '0')); setText('#batterMeta', `${batter[2]}  •  R/R  •  AVG ${batter[3]}`); renderRoster();
+}
+
+function renderStats() {
+  const rows = batters.map((batter, index) => ({ name: batter[0], position: batter[2], average: Number(batter[3]), ...battingStats[index] }));
+  rows.sort((first, second) => {
+    const firstValue = first[tableState.sort]; const secondValue = second[tableState.sort];
+    const comparison = typeof firstValue === 'string' ? firstValue.localeCompare(secondValue) : firstValue - secondValue;
+    return tableState.direction === 'asc' ? comparison : -comparison;
+  });
+  $('#statsBody').innerHTML = rows.map((row, index) => `<tr><td><span class="table-rank">${String(index + 1).padStart(2, '0')}</span><strong>${row.name}</strong></td><td>${row.position}</td><td class="highlight">${row.average.toFixed(3).replace('0.', '.')}</td><td>${row.atBats}</td><td>${row.hits}</td><td>${row.homeRuns}</td><td>${row.rbi}</td></tr>`).join('');
 }
 
 function addPlay(message, active = true) {
@@ -77,5 +95,6 @@ function nextBatter(wasOut) { if (wasOut) { state.outs += 1; state.bases = [fals
 function resetGame() { Object.assign(state, { batter: 0, inning: 1, outs: 0, strikes: 0, balls: 0, away: 0, home: 0, bases: [false, false, false], pitchReady: false, plays: 1 }); $('#runnerLayer').replaceChildren(); $('.pitcher').classList.remove('throwing'); $('.batter').classList.remove('swing-contact', 'swing-power', 'swing-miss'); $('#playLog').innerHTML = '<li class="active">Game ready. Step into the box.</li>'; setText('#fieldCallout', 'READY?'); setText('#pitchRead', 'Awaiting pitcher'); setText('#pitchHint', 'Watch the marker, then choose your swing.'); $('#pitchButton').disabled = false; renderBatter(); updateScoreboard(); }
 
 $('#pitchButton').addEventListener('click', throwPitch); document.querySelectorAll('[data-swing]').forEach((button) => button.addEventListener('click', () => swing(button.dataset.swing))); $('#resetButton').addEventListener('click', resetGame); $('#soundButton').addEventListener('click', (event) => { event.currentTarget.classList.toggle('muted'); event.currentTarget.textContent = event.currentTarget.classList.contains('muted') ? '×' : '♪'; });
+document.querySelectorAll('[data-sort]').forEach((button) => button.addEventListener('click', () => { tableState.direction = tableState.sort === button.dataset.sort && tableState.direction === 'desc' ? 'asc' : 'desc'; tableState.sort = button.dataset.sort; renderStats(); }));
 document.addEventListener('keydown', (event) => { if (event.code === 'Space') { event.preventDefault(); state.pitchReady ? swing('contact') : throwPitch(); } if (event.key === 'Shift') swing('power'); });
-renderBatter(); updateScoreboard();
+renderBatter(); renderStats(); updateScoreboard();
