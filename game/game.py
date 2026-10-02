@@ -6,9 +6,10 @@ import time
 
 
 PITCH_LENGTH = 36
+PITCH_INTERVAL = 5
 HIT_START = 22
 HIT_END = 29
-FRAME_DELAY = 0.07
+FRAME_DELAY = PITCH_INTERVAL / (PITCH_LENGTH + 1)
 
 if os.name == "nt":
     import msvcrt
@@ -32,7 +33,7 @@ def pitch():
         terminal_settings = termios.tcgetattr(sys.stdin.fileno())
         tty.setcbreak(sys.stdin.fileno())
 
-    print("\nPITCHER P" + "-" * PITCH_LENGTH + "C CATCHER")
+    print("\nCPU PITCHER P" + "-" * PITCH_LENGTH + "B BATTER")
     print(" " * (HIT_START + 1) + "[" + "-" * (HIT_END - HIT_START - 1) + "] HIT ZONE")
 
     swing_position = None
@@ -40,15 +41,14 @@ def pitch():
     try:
         for position in range(PITCH_LENGTH + 1):
             path = "-" * position + "o" + "-" * (PITCH_LENGTH - position)
-            print("\rP" + path + "C", end="", flush=True)
+            print("\rP" + path + "B", end="", flush=True)
 
             key = read_key()
-            if key in (" ", "s", "S"):
-                swing_position = position
-                break
             if key in ("q", "Q"):
                 quit_game = True
                 break
+            if swing_position is None and key in (" ", "s", "S"):
+                swing_position = position
 
             time.sleep(FRAME_DELAY)
     finally:
@@ -64,7 +64,8 @@ def main():
     print("          DIAMOND PULSE BASEBALL")
     print("=" * 42)
     batter = input("Batter name: ").strip() or "Rookie"
-    print("\n" + batter + ", watch the pitch travel from P to C.")
+    print("\n" + batter + ", the CPU pitcher throws to you every five seconds.")
+    print("Watch the ball travel from pitcher P to batter B.")
     print("Tap SPACE (or S) to swing. Swing in the HIT ZONE to connect.")
     print("Take a pitch, or press Q during a pitch to quit.\n")
 

@@ -10,7 +10,7 @@ python game/game.py
 
 ## Batting
 
-- Watch the `o` move from pitcher `P` toward catcher `C`.
+- The CPU pitcher throws every five seconds. Watch the `o` travel from pitcher `P` to batter `B`.
 - Tap **Space** or **S** while the ball is in flight to swing.
 - Swing while the ball is inside the marked **HIT ZONE** to get a hit.
 - Swing too early or too late and it is a swing and a miss.
