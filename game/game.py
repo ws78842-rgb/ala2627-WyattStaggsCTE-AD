@@ -41,7 +41,11 @@ def pitch():
     try:
         for position in range(PITCH_LENGTH + 1):
             path = "-" * position + "o" + "-" * (PITCH_LENGTH - position)
-            print("\rP" + path + "B", end="", flush=True)
+            frame = "P" + path + "B"
+            if sys.stdout.isatty():
+                print("\r" + frame, end="", flush=True)
+            else:
+                print(frame, flush=True)
 
             key = read_key()
             if key in ("q", "Q"):
